@@ -1,5 +1,5 @@
 
-# 🔍 Dynatrace Problem Fetcher (Shell Script)
+# Dynatrace Problem Fetcher (Shell Script)
 
 A lightweight shell script that fetches **problem events** from your **Dynatrace SaaS** or **Dynatrace Managed** environment using the [Dynatrace Problems API v2](https://www.dynatrace.com/support/help/dynatrace-api/environment-api/problems-v2/get-problems).
 
@@ -7,7 +7,7 @@ The script supports full pagination via `nextPageKey`, and stores the results in
 
 ---
 
-## 🚀 Features
+## Features
 
 - ✅ Supports **Dynatrace SaaS** and **Dynatrace Managed**
 - 🧭 Configurable timeframe (`-1h`, `-1d`, `-365d`, etc.)
@@ -17,7 +17,7 @@ The script supports full pagination via `nextPageKey`, and stores the results in
 
 ---
 
-## 🧾 Usage
+## Usage
 
 ```bash
 ./problems.sh url="<base_url>" token="<api_token>" timeframe="<relative_time>"
@@ -25,7 +25,7 @@ The script supports full pagination via `nextPageKey`, and stores the results in
 
 ---
 
-## ✅ Examples
+## Examples
 
 ### SaaS Example
 
@@ -49,7 +49,7 @@ The script supports full pagination via `nextPageKey`, and stores the results in
 
 ---
 
-## 📥 Parameters
+## Parameters
 
 | Parameter   | Description                                                                 |
 |-------------|-----------------------------------------------------------------------------|
@@ -59,7 +59,7 @@ The script supports full pagination via `nextPageKey`, and stores the results in
 
 ---
 
-## 📤 Output
+## Output
 
 - The script generates a file: `all_problems.json`
 - It contains a single JSON array with all retrieved problem entries.
@@ -67,7 +67,7 @@ The script supports full pagination via `nextPageKey`, and stores the results in
 
 ---
 
-## 🛠 Requirements
+## Requirements
 
 - `bash`
 - `curl`
@@ -85,7 +85,7 @@ brew install jq
 
 ---
 
-## 📦 Output Sample (JSON)
+## Output Sample (JSON)
 
 ```json
 [
@@ -106,7 +106,7 @@ brew install jq
 
 ---
 
-## 💡 Notes
+## Notes
 
 - This script uses the `/problems` API endpoint with `pageSize=500`.
 - Pagination is handled automatically using `nextPageKey`.
@@ -115,7 +115,7 @@ brew install jq
 
 ---
 
-## 📄 License
+## License
 
 This script is provided as-is for internal or commercial use. No warranties implied. Use responsibly.
 
@@ -123,7 +123,7 @@ This script is provided as-is for internal or commercial use. No warranties impl
 
 ## 👤 Author
 
-Made with ❤️ by [Vishruth Harithsa](https://chat.openai.com)  
+Made with ❤️ by [Vishruth Harithsa](https://www.theharithsa.com)  
 Optimized for automation, observability, and reporting use cases.
 
 ---
