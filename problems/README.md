@@ -1,37 +1,19 @@
-Thanks! Here's the updated and enriched **Markdown documentation** including support for **Dynatrace Managed environments**, where the base URL pattern is `https://<domain>/e/<environment.id>`.
 
----
+# 🔍 Dynatrace Problem Fetcher (Shell Script)
 
-````markdown
-# 🛠 Dynatrace Problem Fetch Script
+A lightweight shell script that fetches **problem events** from your **Dynatrace SaaS** or **Dynatrace Managed** environment using the [Dynatrace Problems API v2](https://www.dynatrace.com/support/help/dynatrace-api/environment-api/problems-v2/get-problems).
 
-This shell script fetches **problem events** from a Dynatrace SaaS or Managed environment using the Dynatrace API v2. It supports **pagination**, collects all problems from a specified time range, and stores the results in a single JSON file.
-
----
-
-## 📄 Script Name
-
-`problems.sh`
+The script supports full pagination via `nextPageKey`, and stores the results in a single, well-structured JSON file for further analysis or automation.
 
 ---
 
 ## 🚀 Features
 
-- Works with both **Dynatrace SaaS** and **Dynatrace Managed** environments.
-- Fully supports **API pagination** using `nextPageKey`.
-- Stores all results in a consolidated JSON array.
-- Accepts dynamic inputs via **named command-line parameters**.
-
----
-
-## 🔧 Supports
-
-| Platform           | URL Format Example                                 |
-|--------------------|----------------------------------------------------|
-| Dynatrace SaaS     | `https://abc123.live.dynatrace.com`                |
-| Dynatrace Managed  | `https://your-domain.com/e/<environment-id>`       |
-
-✅ Use either of the above formats for the `url` parameter.
+- ✅ Supports **Dynatrace SaaS** and **Dynatrace Managed**
+- 🧭 Configurable timeframe (`-1h`, `-1d`, `-365d`, etc.)
+- 📑 Saves all problem entries into one JSON array
+- 🔁 Handles pagination automatically
+- 🧩 Simple CLI usage with named parameters
 
 ---
 
@@ -39,13 +21,13 @@ This shell script fetches **problem events** from a Dynatrace SaaS or Managed en
 
 ```bash
 ./problems.sh url="<base_url>" token="<api_token>" timeframe="<relative_time>"
-````
+```
 
 ---
 
 ## ✅ Examples
 
-### Dynatrace SaaS
+### SaaS Example
 
 ```bash
 ./problems.sh \
@@ -54,72 +36,71 @@ This shell script fetches **problem events** from a Dynatrace SaaS or Managed en
   timeframe="-6h"
 ```
 
-### Dynatrace Managed
+### Managed Example
 
 ```bash
 ./problems.sh \
-  url="https://monitoring.company.com/e/abc-environment" \
+  url="https://monitoring.company.com/e/abc-env-id" \
   token="dt0c01.XXXX.YYYYY" \
   timeframe="-1d"
 ```
+
+> ✅ Note: For Dynatrace Managed, the base URL **must include** `/e/<environment-id>`
 
 ---
 
 ## 📥 Parameters
 
 | Parameter   | Description                                                                 |
-| ----------- | --------------------------------------------------------------------------- |
-| `url`       | Dynatrace base URL. SaaS or Managed format accepted.                        |
-| `token`     | Dynatrace API token with **problems.read** scope.                           |
-| `timeframe` | Relative timeframe (e.g. `-1h`, `-3d`, `-365d`) for filtering problem data. |
+|-------------|-----------------------------------------------------------------------------|
+| `url`       | Dynatrace base URL (SaaS or Managed). Example: `https://abc.live.dynatrace.com` or `https://your.domain/e/env-id` |
+| `token`     | Dynatrace API token with `problems.read` permission                         |
+| `timeframe` | Relative time (e.g., `-1h`, `-3d`, `-365d`) for filtering problem data       |
 
 ---
 
 ## 📤 Output
 
-* The script writes the complete problem set to a file named:
-
-  ```
-  all_problems.json
-  ```
-* File contains a **single JSON array** with all problem entries from the specified time range.
+- The script generates a file: `all_problems.json`
+- It contains a single JSON array with all retrieved problem entries.
+- You can process it further using tools like `jq`, `Python`, or export to CSV.
 
 ---
 
 ## 🛠 Requirements
 
-* `bash`
-* `curl`
-* `jq` (for processing JSON)
+- `bash`
+- `curl`
+- `jq`
 
-### Install `jq`:
+### Install `jq`
 
 ```bash
-# Debian/Ubuntu
+# Ubuntu/Debian
 sudo apt install jq
 
-# Mac (Homebrew)
+# macOS (Homebrew)
 brew install jq
 ```
 
 ---
 
-## 📦 Output File Example
+## 📦 Output Sample (JSON)
 
 ```json
 [
   {
-    "problemId": "1234567890_1610000000000V2",
-    "displayId": "P-123456789",
-    "title": "Error rate increased",
+    "problemId": "3829904921303361697_1747656720000V2",
+    "displayId": "P-2505153985",
+    "title": "Backoff event",
     "severityLevel": "ERROR",
-    "impactLevel": "SERVICE",
+    "impactLevel": "APPLICATION",
     "status": "CLOSED",
-    "startTime": 1610000000000,
-    "endTime": 1610003600000,
-    "managementZones": [ ... ]
-  },
-  ...
+    "startTime": 1747656720000,
+    "endTime": 1747657860000,
+    "managementZones": [...],
+    "affectedEntities": [...]
+  }
 ]
 ```
 
@@ -127,28 +108,22 @@ brew install jq
 
 ## 💡 Notes
 
-* **Pagination is automatic** – the script will continue fetching until all records are retrieved.
-* Time range supports **Dynatrace-compatible relative times** (e.g., `-3h`, `-1d`, `-7d`, `-365d`).
-* Make sure your API token includes `problems.read` permission.
-* Managed users must include the `/e/<env-id>` part in their URL.
+- This script uses the `/problems` API endpoint with `pageSize=500`.
+- Pagination is handled automatically using `nextPageKey`.
+- Make sure your API token has the `problems.read` scope.
+- Output is overwritten on every run (`all_problems.json`).
 
 ---
 
-## 🧪 Sample Command in CI/CD or Automation
+## 📄 License
 
-```bash
-./problems.sh url="https://my.dynatrace.local/e/prod-env" token="$DT_API_TOKEN" timeframe="-24h"
-```
+This script is provided as-is for internal or commercial use. No warranties implied. Use responsibly.
 
 ---
 
 ## 👤 Author
 
-Created by [Vishruth Harithsa](https://chat.openai.com), tailored for real-world Dynatrace operations with flexible environment support.
+Made with ❤️ by [Vishruth Harithsa](https://chat.openai.com)  
+Optimized for automation, observability, and reporting use cases.
 
 ---
-
-```
-
-Let me know if you'd like this added as a `README.md` in a Git repo or need a variant that exports results in CSV!
-```
