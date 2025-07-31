@@ -147,3 +147,38 @@ chmod +x full_auditlog_ingest.sh
 * Keep API tokens secret
 * Rotate tokens periodically
 * Never commit this script with active tokens to version control
+
+---
+
+## 📁 Additional Resources (gen3 Folder)
+
+The repository also includes additional Dynatrace automation resources in the `gen3/` folder:
+
+### 📊 Notebooks (`gen3/Notebooks/`)
+
+- **`Licensing Workflows DQL.json`** - A Dynatrace notebook containing DQL queries for:
+  - **AppEngine Functions Usage Monitoring**: Tracks billing usage events for AppEngine functions by user and calling application
+  - **DQL Query Usage Analysis**: Monitors automation workflow execution hours and details for licensing insights
+
+### 🔄 Workflows (`gen3/Workflows/`)
+
+- **`DDL_High_Query_Usage.json`** - An automated workflow for data usage governance:
+  - **Purpose**: Monitors users who query more than 250 GB of data in 6 hours
+  - **Trigger**: Runs every 6 hours on weekdays (Monday-Friday)
+  - **Features**:
+    - Executes DQL queries to identify high data usage
+    - Groups results by user email
+    - Sends personalized email notifications with:
+      - Total data queried breakdown
+      - List of executed queries
+      - DQL optimization tips and best practices
+      - Links to documentation
+  - **Benefits**: Helps organizations manage DDU (Data Unit) consumption and reduce licensing costs
+
+### 🎯 Use Cases
+
+These resources are particularly useful for:
+- **License Management**: Track and optimize Dynatrace feature usage
+- **Cost Control**: Monitor and alert on high data consumption
+- **User Education**: Provide automated guidance on query optimization
+- **Compliance**: Maintain audit trails of data access patterns
