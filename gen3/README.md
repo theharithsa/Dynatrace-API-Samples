@@ -50,6 +50,7 @@ An intelligent automation workflow for data usage governance and cost control.
 Monitors users who query more than 250 GB of data within 6 hours and provides automated guidance to optimize their usage.
 
 #### ⏰ **Execution Schedule**
+
 - **Trigger**: Automated cron schedule
 - **Frequency**: Every 6 hours
 - **Days**: Monday through Friday (business days)
@@ -75,6 +76,7 @@ Monitors users who query more than 250 GB of data within 6 hours and provides au
 #### 📧 **Email Notification Features**
 
 Each notification includes:
+
 - **📊 Usage Summary**: Total GB queried breakdown
 - **👤 User Details**: Email and identification
 - **🌐 Query Sources**: Where queries were executed
@@ -96,18 +98,21 @@ Each notification includes:
 ## 🎯 Use Cases & Benefits
 
 ### 🏢 **For Organizations**
+
 - **Cost Control**: Proactive monitoring of DDU (Data Unit) consumption
 - **License Management**: Track and optimize Dynatrace feature usage
 - **Compliance**: Maintain audit trails of data access patterns
 - **Budget Planning**: Predictive insights for licensing costs
 
 ### 👥 **For Users**
+
 - **Education**: Automated learning about query optimization
 - **Awareness**: Real-time feedback on data consumption
 - **Guidance**: Practical tips for efficient DQL usage
 - **Performance**: Improved query execution times
 
 ### 🔧 **For Administrators**
+
 - **Governance**: Automated enforcement of usage policies
 - **Monitoring**: Centralized view of platform usage
 - **Optimization**: Identification of inefficient queries
@@ -118,6 +123,7 @@ Each notification includes:
 ## 🚀 Getting Started
 
 ### Prerequisites
+
 - Dynatrace Gen3 platform access
 - Appropriate permissions for:
   - Workflow automation
@@ -145,6 +151,7 @@ Each notification includes:
    ```
 
 ### Configuration Tips
+
 - **Threshold Adjustment**: Modify the 250 GB limit in the workflow as needed
 - **Schedule Customization**: Adjust cron schedule for your organization's needs
 - **Email Templates**: Customize notification content for your organization
@@ -186,6 +193,7 @@ To contribute improvements or report issues:
 ## 📞 Support
 
 For questions or support regarding these resources:
+
 - Check the official Dynatrace documentation
 - Review workflow execution logs
 - Contact your Dynatrace administrator
