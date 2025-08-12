@@ -4,10 +4,13 @@ Welcome to the Gen3 platform resources for advanced Dynatrace automation and lic
 
 ## 📁 Repository Structure
 
-```dql
+```
 gen3/
 ├── Notebooks/           # Dynatrace Notebooks for data analysis
 ├── Workflows/           # Automation workflows for governance
+│   ├── Scripts/         # TypeScript utilities for workflow processing
+│   ├── DDL_High_Query_Usage_v0.1.json
+│   └── Dynatrace_Release_Notes_v0.1.json
 └── README.md           # This documentation
 ```
 
@@ -42,7 +45,7 @@ A comprehensive Dynatrace notebook containing DQL queries for licensing and usag
 
 ## 🔄 Workflows (`Workflows/`)
 
-### `DDL_High_Query_Usage.json`
+### `DDL_High_Query_Usage_v0.1.json`
 
 An intelligent automation workflow for data usage governance and cost control.
 
@@ -95,6 +98,60 @@ Each notification includes:
 
 ---
 
+### `Dynatrace_Release_Notes_v0.1.json`
+
+An automated workflow for generating and distributing Dynatrace platform release notes and updates.
+
+#### 🎯 **Purpose**
+Automates the collection and distribution of Dynatrace platform updates, feature releases, and important announcements to stakeholders.
+
+#### ⚙️ **Workflow Components**
+
+1. **JavaScript Processing Task (`run_javascript_1`)**
+   - Processes release note data and formats content
+   - Generates structured output for email distribution
+   - Handles data transformation and formatting
+
+2. **Email Distribution Task (`send_email_1`)**
+   - Sends formatted release notes to configured recipients  
+   - Supports CC and BCC distribution lists
+   - Customizable email templates and subjects
+
+#### 📧 **Distribution Features**
+- Automated email delivery to stakeholder lists
+- Customizable email content and formatting
+- Support for HTML and plain text formats
+- Configurable distribution schedules
+
+---
+
+### Scripts (`Workflows/Scripts/`)
+
+#### `jsontomdTable.ts`
+
+A TypeScript utility for converting JSON data structures into formatted Markdown tables within Dynatrace workflows.
+
+**Key Features**:
+- **Flexible Input Processing**: Handles various JSON structures (arrays, objects, nested data)
+- **Automatic Column Detection**: Infers table columns from data keys across all records  
+- **Data Type Handling**: Converts arrays, objects, and primitives to readable table cells
+- **Markdown Safety**: Escapes special characters to maintain table formatting
+- **Workflow Integration**: Designed for seamless use within Dynatrace automation workflows
+
+**Input Support**:
+- Direct arrays of objects
+- Nested structures (`.records`, `.payload`, `.data`)
+- JSON strings (with automatic parsing)
+- Single objects (converted to single-row tables)
+
+**Use Cases**:
+- Converting DQL query results to readable tables
+- Formatting API responses for email reports
+- Creating structured data views in notifications
+- Generating documentation tables from data
+
+---
+
 ## 🎯 Use Cases & Benefits
 
 ### 🏢 **For Organizations**
@@ -134,28 +191,33 @@ Each notification includes:
 ### Deployment Steps
 
 1. **Import Notebook**
-   ```
+   ```text
    1. Navigate to Dynatrace → Notebooks
    2. Import `Licensing Workflows DQL.json`
    3. Configure timeframes as needed
    4. Execute queries to validate data
    ```
 
-2. **Deploy Workflow**
-   ```
+2. **Deploy Workflows**
+   ```text
    1. Navigate to Dynatrace → Workflows
-   2. Import `DDL_High_Query_Usage.json`
-   3. Configure email settings
-   4. Activate the workflow schedule
-   5. Test with sample data
+   2. Import desired workflow files:
+      - `DDL_High_Query_Usage_v0.1.json` for data governance
+      - `Dynatrace_Release_Notes_v0.1.json` for release notifications
+   3. Configure email settings and recipients
+   4. Upload TypeScript scripts from Scripts/ folder as needed
+   5. Activate workflow schedules
+   6. Test with sample data
    ```
 
 ### Configuration Tips
 
-- **Threshold Adjustment**: Modify the 250 GB limit in the workflow as needed
-- **Schedule Customization**: Adjust cron schedule for your organization's needs
-- **Email Templates**: Customize notification content for your organization
+- **Threshold Adjustment**: Modify the 250 GB limit in the DDL High Query Usage workflow as needed
+- **Schedule Customization**: Adjust cron schedules for your organization's needs
+- **Email Templates**: Customize notification content and recipient lists for both workflows
 - **Query Optimization**: Regular review and update of DQL queries for performance
+- **Script Customization**: Modify TypeScript scripts in the Scripts/ folder for specific data formatting needs
+- **Release Notes**: Configure the Release Notes workflow with appropriate stakeholder distribution lists
 
 ---
 
