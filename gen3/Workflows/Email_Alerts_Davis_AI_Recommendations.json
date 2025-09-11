@@ -1,0 +1,113 @@
+{
+  "id": "2eb7a47c-ae6b-4b8b-af52-88b49d48b820",
+  "title": "EMAIL - CHAKAN - Copy",
+  "tasks": {
+    "send_email_1": {
+      "name": "send_email_1",
+      "input": {
+        "cc": [],
+        "to": [
+          "sushmita.shet@dynatrace.com"
+        ],
+        "bcc": [],
+        "content": "# Event details: \n{{ result(\"run_javascript_1\").description }}\n\n{{ result(\"run_javascript_1\").aiExplanation }}\n\n\nPlease follow this link to check problem on Dynatrace: https://mespulse-mahindra.apps.dynatrace.com/ui/apps/dynatrace.davis.problems/problem/{{event()[\"event.id\"]}}",
+        "subject": "(Problem ID: {{event()[\"display_id\"]}}) (Status: {{event()[\"event.status\"]}} -  {{ event()[\"event.name\"] }}"
+      },
+      "action": "dynatrace.email:send-email",
+      "position": {
+        "x": 0,
+        "y": 3
+      },
+      "conditions": {
+        "states": {
+          "run_javascript_1": "OK"
+        }
+      },
+      "description": "Send email",
+      "predecessors": [
+        "run_javascript_1"
+      ]
+    },
+    "run_javascript_1": {
+      "name": "run_javascript_1",
+      "input": {
+        "script": "import { execution } from '@dynatrace-sdk/automation-utils';\nimport { monitoredEntitiesClient } from '@dynatrace-sdk/client-classic-environment-v2';\nimport OpenAI from 'openai';\n\nexport default async function ({ execution_id }) {\n  const ex = await execution(execution_id);\n\n  // Parse event and result from the execution\n  const event = ex.event();\n  const result = await ex.result(\"execute_dql_query_1\");\n\n  // Collect affected entity IDs\n  const entityIds = event['affected_entity_ids'] || [];\n\n  // Resolve entity display names\n  const names: string[] = [];\n  for (const id of entityIds) {\n    try {\n      const detail = await monitoredEntitiesClient.getEntity({ entityId: id });\n      names.push(detail.displayName || id);\n    } catch {\n      names.push(id); // fallback to ID if lookup fails\n    }\n  }\n\n  // Extract raw timestamp from result\n  const rawTimestamp = result.records?.[0]?.[\"timestamp\"];\n\n  // Convert to IST if present\n  const istTimestamp = rawTimestamp\n    ? new Date(rawTimestamp).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })\n    : 'N/A';\n\n  // Build Markdown-friendly description\n  const description = [\n    `## Problem`,\n    `**Name:** ${event['event.name'] || 'N/A'}`,\n    `**Kind:** ${event['event.kind'] || 'N/A'}  |  **Category:** ${event['event.category'] || 'N/A'}  |  **Status:** ${event['event.status'] || 'N/A'}`,\n    `**Problem ID:** ${event['display_id'] || event['event.id'] || 'N/A'}`,\n    `**Maintenance Mode:** ${event['maintenance.is_under_maintenance'] !== undefined ? event['maintenance.is_under_maintenance'] : 'N/A'}`,\n    `**Timestamp (IST):** ${istTimestamp}`,\n    ``,\n    `## Entities`,\n    `- **Affected entity types:** ${(event['affected_entity_types'] || []).join(', ') || 'N/A'}`,\n    `- **Affected entity names:** ${names.join(', ') || 'N/A'}`,\n    `- **Root cause:** ${event['root_cause_entity_name'] || 'N/A'} (${event['root_cause_entity_id'] || ''})`,\n    ``,\n    `## Host & Infrastructure`,\n    `- **Host name(s):** ${(event['host.name'] || []).join(', ') || 'N/A'}`,\n    `- **Host group name(s):** ${(event['dt.host_group.id'] || []).join(', ') || 'N/A'}`,\n    ``,\n    `## Tags`,\n    `- **Entity tags:** ${(event['entity_tags'] || []).join(', ') || 'N/A'}`,\n    ``\n  ].join('\\n');\n\n const copilotResponse = await fetch(\n  'https://wku19290.apps.dynatrace.com/platform/davis/copilot/v1/skills/conversations:message',\n  {\n    method: 'POST',\n    headers: {\n      'accept': 'application/json',\n      'Content-Type': 'application/json',\n      'Authorization': `Bearer <API Token>` // Replace with your actual token\n    },\n    body: JSON.stringify({\n      text: `\nYou are an expert Dynatrace and observability engineer.\nGiven the following raw event JSON, write a clear, concise, and professional explanation of the problem for a non-technical stakeholder.\nHighlight what happened, which systems are impacted, and any relevant context. Based on the problem also see if similar problems occured for the affected entity in last 7 days and mention the reference to the problems as well like count and other important details. \n\n${description}\n      `.trim()\n    })\n  }\n);\n\nconst copilotData = await copilotResponse.json();\nconst aiExplanation = copilotData.text || 'No explanation generated.';\n\n\n  return {\n    description,        // Markdown-formatted technical details\n    entityNames: names, // Resolved entity names\n    aiExplanation       // Human-friendly summary from OpenAI\n  };\n}"
+      },
+      "action": "dynatrace.automations:run-javascript",
+      "position": {
+        "x": 0,
+        "y": 2
+      },
+      "conditions": {
+        "states": {
+          "execute_dql_query_1": "OK"
+        }
+      },
+      "description": "Run custom JavaScript code.",
+      "predecessors": [
+        "execute_dql_query_1"
+      ]
+    },
+    "execute_dql_query_1": {
+      "name": "execute_dql_query_1",
+      "input": {
+        "query": "fetch dt.davis.problems\n| filter display_id == \"{{event()[\"display_id\"]}}\"\n| fields timestamp = formatTimestamp(timestamp)"
+      },
+      "action": "dynatrace.automations:execute-dql-query",
+      "position": {
+        "x": 0,
+        "y": 1
+      },
+      "description": "Make use of Dynatrace Grail data in your workflow.",
+      "predecessors": []
+    }
+  },
+  "description": "",
+  "actor": "db793755-1f39-43b9-b443-4be73887345f",
+  "owner": "db793755-1f39-43b9-b443-4be73887345f",
+  "ownerType": "USER",
+  "isPrivate": false,
+  "trigger": {
+    "eventTrigger": {
+      "isActive": true,
+      "filterQuery": "event.kind == \"DAVIS_PROBLEM\" AND (event.category == \"MONITORING_UNAVAILABLE\" OR event.category == \"AVAILABILITY\" OR event.category == \"ERROR\" OR event.category == \"SLOWDOWN\" OR event.category == \"RESOURCE_CONTENTION\" OR event.category == \"CUSTOM_ALERT\" OR event.category == \"INFO\") AND (matchesValue(entity_tags, \"EV*\") OR matchesValue(entity_tags, \"ME*\") OR matchesValue(entity_tags, \"FTPC*\") OR matchesValue(entity_tags, \"ROCKWELL*\"))",
+      "uniqueExpression": "{{ event()[\"event.id\"] }}-{{ \"open\" if event()[\"event.status_transition\"] in (\"CREATED\", \"UPDATED\", \"REOPENED\", \"REFRESHED\") else \"resolved\" }}-{{ event()[\"dt.davis.last_reopen_timestamp\"] }}",
+      "triggerConfiguration": {
+        "type": "davis-problem",
+        "value": {
+          "categories": {
+            "info": true,
+            "error": true,
+            "custom": true,
+            "resource": true,
+            "slowdown": true,
+            "availability": true,
+            "monitoringUnavailable": true
+          },
+          "entityTags": {
+            "EV": [
+              ""
+            ],
+            "ME": [
+              ""
+            ],
+            "FTPC": [
+              ""
+            ],
+            "ROCKWELL": [
+              ""
+            ]
+          },
+          "customFilter": "",
+          "onProblemClose": true,
+          "entityTagsMatch": "any"
+        }
+      }
+    }
+  },
+  "schemaVersion": 3,
+  "result": null,
+  "input": {},
+  "hourlyExecutionLimit": 1000,
+  "type": "STANDARD"
+}

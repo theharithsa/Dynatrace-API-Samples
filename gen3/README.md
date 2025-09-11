@@ -10,7 +10,8 @@ gen3/
 ├── Workflows/           # Automation workflows for governance
 │   ├── Scripts/         # TypeScript utilities for workflow processing
 │   ├── DDL_High_Query_Usage_v0.1.json
-│   └── Dynatrace_Release_Notes_v0.1.json
+│   ├── Dynatrace_Release_Notes_v0.1.json
+│   └── Email_Alerts_Davis_AI_Recommendations.json
 └── README.md           # This documentation
 ```
 
@@ -125,6 +126,70 @@ Automates the collection and distribution of Dynatrace platform updates, feature
 
 ---
 
+### `Email_Alerts_Davis_AI_Recommendations.json`
+
+An intelligent workflow that combines Dynatrace problem detection with Davis AI-powered recommendations for enhanced incident response.
+
+#### 🎯 **Purpose**
+Automatically processes Dynatrace problems and generates AI-enhanced email alerts with contextual information and intelligent recommendations for faster resolution.
+
+#### ⚙️ **Workflow Components**
+
+1. **DQL Query Execution (`execute_dql_query_1`)**
+   - Executes data queries to gather problem context and historical information
+   - Collects relevant metrics and entity data
+   - Provides input data for AI analysis
+
+2. **JavaScript Processing (`run_javascript_1`)**
+   - **Entity Resolution**: Resolves affected entity IDs to human-readable display names
+   - **Timestamp Conversion**: Converts UTC timestamps to IST (Asia/Kolkata timezone)
+   - **Markdown Formatting**: Creates structured problem descriptions with:
+     - Problem details (name, kind, category, status, ID)
+     - Maintenance mode status
+     - Affected entities and root cause analysis
+     - Host and infrastructure information
+     - Entity tags and metadata
+   - **Davis AI Integration**: Leverages Dynatrace Copilot API to generate intelligent explanations
+   - **Contextual Analysis**: Analyzes similar problems in the last 7 days for pattern recognition
+
+3. **Email Notification (`send_email_1`)**
+   - Sends rich-formatted emails with problem details and AI insights
+   - Includes direct links to Dynatrace problem investigation
+   - Customizable recipient lists and subject formatting
+
+#### 🤖 **AI-Powered Features**
+
+- **Intelligent Explanations**: Davis AI generates clear, non-technical explanations for stakeholders
+- **Historical Context**: References similar problems from the past 7 days
+- **Pattern Recognition**: Identifies recurring issues and trends
+- **Root Cause Insights**: AI-enhanced analysis of problem causes and impact
+
+#### 📧 **Email Content Structure**
+
+Each alert includes:
+- **📋 Problem Summary**: Technical details and metadata
+- **🤖 AI Analysis**: Human-friendly explanation and recommendations  
+- **🔗 Direct Links**: Quick access to Dynatrace problem investigation
+- **📊 Historical Context**: References to similar recent problems
+- **🎯 Impact Assessment**: Entity and infrastructure impact details
+
+#### 🏷️ **Trigger Configuration**
+
+- **Event Types**: Error, custom, resource, slowdown, availability, monitoring unavailable
+- **Entity Tags**: Supports multiple tag-based filtering (EV, ME, FTPC, ROCKWELL)
+- **Problem Lifecycle**: Triggers on problem open and close events
+- **Tag Matching**: Configurable "any" tag matching logic
+
+#### 💡 **Benefits**
+
+- **Faster Response**: AI-generated insights accelerate problem understanding
+- **Better Communication**: Non-technical explanations for business stakeholders
+- **Context Awareness**: Historical problem patterns and trends
+- **Reduced MTTR**: Direct links and contextual information speed resolution
+- **Automated Triage**: Intelligent categorization and impact assessment
+
+---
+
 ### Scripts (`Workflows/Scripts/`)
 
 #### `jsontomdTable.ts`
@@ -204,20 +269,26 @@ A TypeScript utility for converting JSON data structures into formatted Markdown
    2. Import desired workflow files:
       - `DDL_High_Query_Usage_v0.1.json` for data governance
       - `Dynatrace_Release_Notes_v0.1.json` for release notifications
+      - `Email_Alerts_Davis_AI_Recommendations.json` for AI-enhanced problem alerts
    3. Configure email settings and recipients
-   4. Upload TypeScript scripts from Scripts/ folder as needed
-   5. Activate workflow schedules
-   6. Test with sample data
+   4. Set up Davis AI/Copilot API access for AI recommendations (if using)
+   5. Upload TypeScript scripts from Scripts/ folder as needed
+   6. Configure problem trigger filters and entity tags
+   7. Activate workflow schedules and problem triggers
+   8. Test with sample data and problem events
    ```
 
 ### Configuration Tips
 
 - **Threshold Adjustment**: Modify the 250 GB limit in the DDL High Query Usage workflow as needed
 - **Schedule Customization**: Adjust cron schedules for your organization's needs
-- **Email Templates**: Customize notification content and recipient lists for both workflows
+- **Email Templates**: Customize notification content and recipient lists for all workflows
 - **Query Optimization**: Regular review and update of DQL queries for performance
 - **Script Customization**: Modify TypeScript scripts in the Scripts/ folder for specific data formatting needs
 - **Release Notes**: Configure the Release Notes workflow with appropriate stakeholder distribution lists
+- **AI Configuration**: Set up Davis AI/Copilot API tokens and endpoints for intelligent recommendations
+- **Problem Filtering**: Configure entity tags and problem type filters for targeted alerting
+- **Timezone Settings**: Adjust timestamp conversion for your regional requirements (default: IST)
 
 ---
 
