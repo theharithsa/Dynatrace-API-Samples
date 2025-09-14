@@ -4,12 +4,19 @@ A comprehensive collection of Dynatrace automation tools, scripts, and workflows
 
 ## 📁 Repository Structure
 
-```
+```text
 Dynatrace-API-Samples/
 ├── 📋 auditLogs_Ingestion/     # Audit logs collection and ingestion
-├── 🧠 gen3/                   # Advanced automation and licensing tools
-├── 🚨 problems/               # Problem event fetching utilities
-└── 📖 README.md               # This documentation
+│   ├── auditlog_ingestion.sh   # Shell script implementation
+│   └── gen3/                   # TypeScript Gen3 implementation
+│       └── audit_logs_ingest.ts
+├── 🧠 gen3/                    # Advanced automation and licensing tools
+│   ├── Notebooks/              # DQL analysis notebooks
+│   └── Workflows/              # Automation workflows and scripts
+├── 🚨 problems/                # Problem event fetching utilities
+│   ├── problems.sh             # Shell script for problem extraction
+│   └── README.md
+└── 📖 README.md                # This documentation
 ```
 
 ---
@@ -20,10 +27,22 @@ Dynatrace-API-Samples/
 
 **Purpose**: Automated collection and ingestion of Dynatrace audit logs for compliance and monitoring.
 
+**Available Implementations**:
+
+#### 🛠️ **Shell Script** (`auditlog_ingestion.sh`)
+- Traditional bash-based automation for any environment
+- Custom field enrichment (cost center, content length)
+- Standalone execution with configurable tokens
+
+#### ⚡ **TypeScript** (`gen3/audit_logs_ingest.ts`) - **Recommended**
+- Modern Gen3 platform integration with native SDK
+- Automatic authentication and workflow integration
+- Cleaner, maintainable code with better error handling
+
 **Key Features**:
 
 - ✅ Fetches audit logs from Dynatrace API with pagination support
-- 🏷️ Enhances logs with custom metadata (source, cost center, content length)
+- 🏷️ Enhances logs with custom metadata and source identification
 - 📤 Sends enriched logs to Dynatrace Generic Log Ingest API
 - ⚙️ Configurable timeframes and batch processing
 - 🛡️ Built-in error handling and validation
@@ -38,9 +57,13 @@ Dynatrace-API-Samples/
 **Quick Start**:
 
 ```bash
+# Shell Script (Legacy)
 cd auditLogs_Ingestion/
 chmod +x auditlog_ingestion.sh
 ./auditlog_ingestion.sh
+
+# TypeScript (Gen3 Platform - Recommended)
+# Deploy gen3/audit_logs_ingest.ts to Dynatrace Workflow
 ```
 
 📖 [Detailed Documentation](./auditLogs_Ingestion/README.md)
@@ -159,10 +182,16 @@ Before using any tools in this repository, ensure you have:
    - Workflows: `Automation workflows` permission
 
 3. **Technical Dependencies**
+
+   **For Shell Scripts**:
    - `bash` shell environment
    - `curl` for API requests
    - `jq` for JSON processing
-   - Dynatrace Gen3 platform access (for gen3 tools)
+
+   **For TypeScript/Gen3 Tools**:
+   - Dynatrace Gen3 platform access
+   - Workflow automation permissions
+   - `@dynatrace-sdk/client-classic-environment-v2` (auto-managed)
 
 ### Installation & Setup
 

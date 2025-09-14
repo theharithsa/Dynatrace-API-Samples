@@ -1,16 +1,69 @@
-## 📄 Dynatrace Audit Logs to Log Ingest Script Documentation
+## 📄 Dynatrace Audit Logs to Log Ingest Documentation
 
-### 📌 Purpose
+This folder contains both **Shell Script** and **TypeScript** implementations for automating audit log collection and ingestion into Dynatrace.
 
-This script automates the following:
+## � Repository Structure
+
+```
+auditLogs_Ingestion/
+├── auditlog_ingestion.sh    # Bash implementation (legacy)
+├── gen3/                    # Gen3 platform implementation
+│   └── audit_logs_ingest.ts # TypeScript implementation
+└── README.md               # This documentation
+```
+
+---
+
+## 🔄 Available Implementations
+
+### 🛠️ Shell Script Implementation (`auditlog_ingestion.sh`)
+
+**Purpose**: Traditional bash-based automation that:
 
 1. **Fetches Audit Logs** from Dynatrace API (with pagination support).
 2. **Enhances each log** with:
-
    * `"log.source": "AuditLogs"`
    * `"dt.cost.costcenter": "LogIngest"`
    * `"content.length"`: number of characters in the raw log object.
 3. **Sends** the enriched logs to the **Dynatrace Generic Log Ingest API**.
+
+### ⚡ TypeScript Implementation (`gen3/audit_logs_ingest.ts`)
+
+**Purpose**: Modern Gen3 platform automation that:
+
+1. **Fetches Audit Logs** using Dynatrace SDK client libraries with automatic pagination
+2. **Enhances each log** with `"log.source": "auditLogs"` metadata
+3. **Bulk ingests** all logs using the native Dynatrace logs client
+4. **Returns** structured response with ingestion count and status
+
+**Key Advantages**:
+
+* ✅ **Native SDK Integration**: Uses official `@dynatrace-sdk/client-classic-environment-v2`
+* ✅ **Automatic Authentication**: Leverages platform-managed tokens
+* ✅ **Simplified Code**: Cleaner, more maintainable TypeScript implementation
+* ✅ **Better Error Handling**: Built-in SDK error management
+* ✅ **Workflow Integration**: Designed for Dynatrace workflow automation
+* ✅ **Configurable Timeframe**: Default 48-hour lookback with easy customization
+
+---
+
+## 🎯 Which Implementation to Choose?
+
+### Choose **TypeScript Implementation** (`gen3/audit_logs_ingest.ts`) if:
+
+* ✅ You're using **Dynatrace Gen3 platform** with workflow automation
+* ✅ You want **native SDK integration** with built-in authentication
+* ✅ You prefer **modern, maintainable code** with TypeScript
+* ✅ You need **seamless workflow integration** and scheduling
+* ✅ You want **simplified deployment** without external dependencies
+
+### Choose **Shell Script Implementation** (`auditlog_ingestion.sh`) if:
+
+* ✅ You're using **traditional Dynatrace environments**
+* ✅ You need **standalone script execution** outside workflows
+* ✅ You prefer **bash scripting** for system integration
+* ✅ You want **custom field enrichment** (cost center, content length)
+* ✅ You need **flexible deployment** on various systems
 
 ---
 
@@ -126,19 +179,43 @@ brew install jq          # macOS
 
 ---
 
-## ▶️ Running the Script
+## ▶️ Usage Instructions
+
+### 🚀 TypeScript Implementation (Recommended)
+
+1. **Deploy to Dynatrace Workflow**:
+
+   ```text
+   1. Navigate to Dynatrace → Workflows
+   2. Create new workflow or import existing
+   3. Add JavaScript task
+   4. Copy content from gen3/audit_logs_ingest.ts
+   5. Configure schedule (recommended: daily)
+   6. Save and activate workflow
+   ```
+
+2. **Customize Timeframe** (optional):
+
+   ```typescript
+   // Change the timeframe as needed
+   from: "now-24h",  // 24 hours
+   from: "now-7d",   // 7 days
+   from: "now-30d",  // 30 days
+   ```
+
+### 🛠️ Shell Script Implementation (Legacy)
 
 1. **Make it executable**:
 
-```bash
-chmod +x full_auditlog_ingest.sh
-```
+   ```bash
+   chmod +x auditlog_ingestion.sh
+   ```
 
 2. **Run it**:
 
-```bash
-./full_auditlog_ingest.sh
-```
+   ```bash
+   ./auditlog_ingestion.sh
+   ```
 
 ---
 
