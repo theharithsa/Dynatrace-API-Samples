@@ -4,6 +4,37 @@ This document outlines the complete setup process for creating a comprehensive a
 
 ---
 
+## Table of Contents
+
+1. [Business Justification](#business-justification)
+   - [Why Organizations Need This Dashboard](#why-organizations-need-this-dashboard)
+   - [User Management & License Optimization](#user-management--license-optimization)
+   - [Authentication & Security Monitoring](#authentication--security-monitoring)
+   - [Configuration Change Management](#configuration-change-management)
+   - [Environment Health & API Monitoring](#environment-health--api-monitoring)
+   - [Operational Intelligence & Troubleshooting](#operational-intelligence--troubleshooting)
+   - [Practical Business Value](#practical-business-value)
+   - [Measurable Outcomes](#measurable-outcomes)
+
+2. [Implementation Steps](#implementation-steps)
+   - [Step 1: Storage Setup - Create Audit Logs Bucket](#step-1-storage-setup---create-audit-logs-bucket)
+   - [Step 2: Data Pipeline Configuration - OpenPipeline Setup](#step-2-data-pipeline-configuration---openpipeline-setup)
+   - [Step 3: Automated Data Ingestion - Workflow Creation](#step-3-automated-data-ingestion---workflow-creation)
+   - [Step 4: Dashboard Creation - Data Visualization](#step-4-dashboard-creation---data-visualization)
+   - [Step 5: Collaboration & Access Management](#step-5-collaboration--access-management)
+
+3. [Dashboard Metrics & Available Data](#dashboard-metrics--available-data)
+   - [User Management Metrics](#user-management-metrics)
+   - [Authentication Analytics](#authentication-analytics)
+   - [User Activity Intelligence](#user-activity-intelligence)
+   - [Configuration Management Tracking](#configuration-management-tracking)
+   - [Detailed User Activity Data](#detailed-user-activity-data)
+   - [Time-based Analytics](#time-based-analytics)
+   - [Security and Compliance Data](#security-and-compliance-data)
+   - [Interactive Features](#interactive-features)
+
+---
+
 ## 💼 Business Justification
 
 ### 🎯 **Why Organizations Need This Dashboard**
@@ -85,35 +116,13 @@ Based on the dashboard's metrics, organizations can expect:
 
 ---
 
-## Table of Contents
-
-1. [Implementation Steps](#implementation-steps)
-   - [Step 1: Storage Setup - Create Audit Logs Bucket](#step-1-storage-setup---create-audit-logs-bucket)
-   - [Step 2: Data Pipeline Configuration - OpenPipeline Setup](#step-2-data-pipeline-configuration---openpipeline-setup)
-   - [Step 3: Automated Data Ingestion - Workflow Creation](#step-3-automated-data-ingestion---workflow-creation)
-   - [Step 4: Dashboard Creation - Data Visualization](#step-4-dashboard-creation---data-visualization)
-   - [Step 5: Collaboration & Access Management](#step-5-collaboration--access-management)
-
-2. [Dashboard Metrics & Available Data](#dashboard-metrics--available-data)
-   - [User Management Metrics](#user-management-metrics)
-   - [Authentication Analytics](#authentication-analytics)
-   - [User Activity Intelligence](#user-activity-intelligence)
-   - [Configuration Management Tracking](#configuration-management-tracking)
-   - [Detailed User Activity Data](#detailed-user-activity-data)
-   - [Time-based Analytics](#time-based-analytics)
-   - [Security and Compliance Data](#security-and-compliance-data)
-   - [Interactive Features](#interactive-features)
-
----
 ## Pre-requisites
 
 - Access to Dynatrace environment with permissions to create storage buckets, data pipelines, workflows, and dashboards.
 - Ensure you have ```storage:logs:write``` permission enabled in your user.
 - Having OAuth token ID, Secret and URN if not please configure form OAuth clients from Account Management portal.
 
----
-
-## ⚠️ **Important Licensing Notice**
+### ⚠️ **Important Licensing Notice**
 
 **Note**: This solution consumes Log Management ingest, processing, retention, and query execution quotas. All usage is billed under Dynatrace Log Management licensing as per the DPS rate card.
 
