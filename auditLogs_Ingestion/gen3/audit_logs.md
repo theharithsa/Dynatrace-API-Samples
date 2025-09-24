@@ -4,6 +4,87 @@ This document outlines the complete setup process for creating a comprehensive a
 
 ---
 
+## 💼 Business Justification
+
+### 🎯 **Why Organizations Need This Dashboard**
+
+This audit logs dashboard provides essential visibility into Dynatrace environment usage patterns, security events, and system health. Based on the actual metrics and visualizations available, organizations gain practical insights for operational management and compliance requirements.
+
+#### **User Management & License Optimization**
+
+The dashboard provides concrete metrics for managing user resources:
+
+- **Total Users Tracking**: Monitor total users vs. activated users to optimize license utilization
+- **Current Active Users**: Real-time view of current active users for capacity planning
+- **Pending User Management**: Track pending users to streamline user activation processes
+- **Application Group Analytics**: Visualize login patterns across different user groups and applications
+- **User Activity Tracking**: Monitor individual user behavior and identify inactive accounts
+
+#### **Authentication & Security Monitoring**
+
+Track critical security metrics with detailed login analytics:
+
+- **Login Event Tracking**: Monitor total logins and logout events for session management
+- **Login Patterns Analysis**: Time-series visualization showing login trends over days/hours
+- **User Session Management**: Track users logged out by session management policies
+- **Authentication Trends**: Identify peak usage times and unusual login patterns
+- **Security Event Categories**: Monitor CREATE, UPDATE, DELETE operations by user
+
+#### ⚙️ **Configuration Change Management**
+
+Maintain visibility into system modifications:
+
+- **Configuration Changes by Schema**: Pie chart breakdown of changes across different system components
+- **Configuration Changes by User**: Track which users are making system modifications
+- **Change Event Categorization**: Detailed view of create, update, and delete operations
+- **Change Timeline Tracking**: Historical view of configuration modifications over time
+
+#### 🌐 **Environment Health & API Monitoring**
+
+Monitor system performance and API usage:
+- **API Token Usage**: Track API tokens in use for resource management
+- **API Calls to ActiveGate**: Monitor POST requests and system communication patterns
+- **Network Traffic Analysis**: Track incoming/outgoing network traffic to/from clients and Dynatrace environment
+- **Agent Module Connectivity**: Monitor connection status of various agent modules
+- **Problem Severity Tracking**: Monitor ERROR, AVAILABILITY, RESOURCE_CONTENTION, and PERFORMANCE issues
+- **Log Ingestion Trends**: Track log volume patterns over time periods
+
+#### 🔍 **Operational Intelligence & Troubleshooting**
+
+Gain insights for daily operations:
+
+- **Top Users by Activity**: Identify most active users and their system interactions
+- **Login Heat Map**: Visual representation of login activity patterns throughout the day
+- **Network Performance Monitoring**: Track network traffic patterns and identify potential bottlenecks
+- **REST API Usage**: Monitor API call volumes and identify usage trends
+- **System Health Indicators**: Real-time view of dropped, resent, and rejected messages
+
+### 💡 **Practical Business Value**
+
+#### **For IT Operations Teams**
+
+- **Resource Planning**: Use user activation metrics to optimize license costs
+- **Capacity Management**: Monitor current active users and peak login times for infrastructure planning
+- **Change Tracking**: Visibility into who made what configuration changes and when
+- **Performance Monitoring**: Track API usage patterns and network health metrics
+
+#### **For Security Teams**
+
+- **Access Monitoring**: Real-time view of login/logout patterns and active sessions
+- **Change Auditing**: Complete trail of configuration modifications by user
+- **Anomaly Detection**: Identify unusual login patterns or excessive configuration changes
+- **Session Management**: Monitor forced logouts and session timeout events
+
+### 📈 **Measurable Outcomes**
+
+Based on the dashboard's metrics, organizations can expect:
+
+- **Security Incident Response**: Faster identification of unauthorized changes through user-specific change tracking
+- **Operational Efficiency**: Proactive monitoring of API usage patterns and system health indicators
+- **Compliance Readiness**: Complete audit trail of user actions, logins, and configuration changes available on-demand
+
+---
+
 ## Table of Contents
 
 1. [Implementation Steps](#implementation-steps)
