@@ -111,6 +111,13 @@ Based on the dashboard's metrics, organizations can expect:
 - Ensure you have ```storage:logs:write``` permission enabled in your user.
 - Having OAuth token ID, Secret and URN if not please configure form OAuth clients from Account Management portal.
 
+---
+
+## ⚠️ **Important Licensing Notice**
+
+**Note**: This solution consumes Log Management ingest, processing, retention, and query execution quotas. All usage is billed under Dynatrace Log Management licensing as per the DPS rate card.
+
+---
 
 ## Implementation Steps
 
