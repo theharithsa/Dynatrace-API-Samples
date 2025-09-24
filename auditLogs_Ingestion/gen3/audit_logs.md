@@ -6,15 +6,15 @@ This document outlines the complete setup process for creating a comprehensive a
 
 ## Table of Contents
 
-1. [Business Justification](#business-justification)
-   - [Why Organizations Need This Dashboard](#why-organizations-need-this-dashboard)
+1. [Business Justification](#-business-justification)
+   - [Why Organizations Need This Dashboard](#-why-organizations-need-this-dashboard)
    - [User Management & License Optimization](#user-management--license-optimization)
    - [Authentication & Security Monitoring](#authentication--security-monitoring)
-   - [Configuration Change Management](#configuration-change-management)
-   - [Environment Health & API Monitoring](#environment-health--api-monitoring)
-   - [Operational Intelligence & Troubleshooting](#operational-intelligence--troubleshooting)
-   - [Practical Business Value](#practical-business-value)
-   - [Measurable Outcomes](#measurable-outcomes)
+   - [Configuration Change Management](#️-configuration-change-management)
+   - [Environment Health & API Monitoring](#-environment-health--api-monitoring)
+   - [Operational Intelligence & Troubleshooting](#-operational-intelligence--troubleshooting)
+   - [Practical Business Value](#-practical-business-value)
+   - [Measurable Outcomes](#-measurable-outcomes)
 
 2. [Implementation Steps](#implementation-steps)
    - [Step 1: Storage Setup - Create Audit Logs Bucket](#step-1-storage-setup---create-audit-logs-bucket)
@@ -73,6 +73,7 @@ Maintain visibility into system modifications:
 #### 🌐 **Environment Health & API Monitoring**
 
 Monitor system performance and API usage:
+
 - **API Token Usage**: Track API tokens in use for resource management
 - **API Calls to ActiveGate**: Monitor POST requests and system communication patterns
 - **Network Traffic Analysis**: Track incoming/outgoing network traffic to/from clients and Dynatrace environment
