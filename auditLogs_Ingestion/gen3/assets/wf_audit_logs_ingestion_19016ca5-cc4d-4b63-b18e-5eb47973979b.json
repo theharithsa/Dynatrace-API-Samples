@@ -1,0 +1,46 @@
+{
+  "id": "19016ca5-cc4d-4b63-b18e-5eb47973979b",
+  "title": "Audit Logs Ingestion",
+  "tasks": {
+    "ingest_audit_logs": {
+      "name": "ingest_audit_logs",
+      "input": {
+        "script": "import { auditLogsClient, logsClient } from \"@dynatrace-sdk/client-classic-environment-v2\";\n\nexport default async function () {\n  const PAGE_SIZE = 1000;\n  const all: any[] = [];\n\n  // 1) First page\n  let page = await auditLogsClient.getLogs({\n    from: \"now-10m\",\n    pageSize: PAGE_SIZE,\n  });\n\n  if (Array.isArray(page.auditLogs)) {\n    all.push(...page.auditLogs);\n  }\n\n  let next = page.nextPageKey ?? null;\n\n  // 2) Follow nextPageKey\n  while (next) {\n    page = await auditLogsClient.getLogs({ nextPageKey: next });\n    if (Array.isArray(page.auditLogs) && page.auditLogs.length) {\n      all.push(...page.auditLogs);\n    }\n    next = page.nextPageKey ?? null;\n  }\n\n  // 3) If nothing, return early\n  if (!all.length) {\n    return { message: \"No new logs found\" };\n  }\n\n  // 4) Enrich each record with log.source\n  const enriched = all.map((log: any) => ({\n    ...log,\n    \"log.source\": \"auditLogs\",\n  }));\n\n  // 5) Send to log ingest\n  const data = await logsClient.storeLog({\n    type: \"application/json\",\n    body: enriched,\n  });\n\n  return {\n    message: `Ingested ${enriched.length} audit logs`,\n    response: data,\n  };\n}\n"
+      },
+      "action": "dynatrace.automations:run-javascript",
+      "position": {
+        "x": 0,
+        "y": 1
+      },
+      "description": "Run custom JavaScript code.",
+      "predecessors": []
+    }
+  },
+  "description": "",
+  "actor": "db793755-1f39-43b9-b443-4be73887345f",
+  "owner": "db793755-1f39-43b9-b443-4be73887345f",
+  "ownerType": "USER",
+  "isPrivate": true,
+  "trigger": {
+    "schedule": {
+      "isActive": true,
+      "isFaulty": false,
+      "trigger": {
+        "type": "interval",
+        "intervalMinutes": 1
+      },
+      "rule": null,
+      "filterParameters": {
+        "earliestStart": "2025-09-12",
+        "earliestStartTime": "13:31"
+      },
+      "timezone": "Asia/Calcutta",
+      "inputs": {}
+    }
+  },
+  "schemaVersion": 3,
+  "result": null,
+  "input": {},
+  "hourlyExecutionLimit": 1000,
+  "type": "STANDARD"
+}

@@ -1,0 +1,46 @@
+{
+  "id": "6f42c440-5256-48c9-bb0f-8a244c795a8f",
+  "title": "User and Groups Log Ingestion",
+  "tasks": {
+    "user_and_groups_ingestion": {
+      "name": "user_and_groups_ingestion",
+      "input": {
+        "script": "import { logsClient } from \"@dynatrace-sdk/client-classic-environment-v2\";\n\nexport default async function (payload: unknown = undefined) {\n  const accountId = 'b13b6aa8-0eb3-4e63-abdd-b2998414afd9';\n\n  // Step 1: Get access token\n  const tokenResponse = await fetch('https://sso.dynatrace.com/sso/oauth2/token', {\n    method: 'POST',\n    headers: {\n      'Content-Type': 'application/x-www-form-urlencoded',\n    },\n    body: new URLSearchParams({\n      grant_type: 'client_credentials',\n      client_id: '<client_id>',\n      client_secret: '<oauth Secret>',\n      scope:\n        'iam-policies-management iam:policies:write iam:policies:read iam:bindings:write iam:bindings:read iam:effective-permissions:read account-idm-read account-idm-write',\n      resource: `urn:dtaccount:${accountId}`,\n    }).toString(),\n  });\n\n  if (!tokenResponse.ok) {\n    const err = await tokenResponse.text();\n    throw new Error(`Token request failed: ${err}`);\n  }\n\n  const tokenData = await tokenResponse.json();\n  const accessToken = tokenData.access_token;\n\n  const headers = {\n    Authorization: `Bearer ${accessToken}`,\n    Accept: 'application/json',\n  };\n\n  // Step 2: Fetch all users\n  const usersResponse = await fetch(\n    `https://api.dynatrace.com/iam/v1/accounts/${accountId}/users?service-users=false`,\n    { method: 'GET', headers }\n  );\n\n  if (!usersResponse.ok) {\n    const err = await usersResponse.text();\n    throw new Error(`Failed to fetch users: ${err}`);\n  }\n\n  const usersData = await usersResponse.json();\n  const users = usersData.items || [];\n\n  // Build a map of users by email for quick lookup\n  const userMap: Record<string, any> = {};\n  for (const user of users) {\n    userMap[user.email] = {\n      ...user,\n      groups: [],\n      \"log.source\": \"alstom/audit/users\"\n    };\n  }\n\n  // Step 3: Fetch all groups\n  const groupsResponse = await fetch(\n    `https://api.dynatrace.com/iam/v1/accounts/${accountId}/groups`,\n    { method: 'GET', headers }\n  );\n\n  if (!groupsResponse.ok) {\n    const err = await groupsResponse.text();\n    throw new Error(`Failed to fetch groups: ${err}`);\n  }\n\n  const groupsData = await groupsResponse.json();\n  const groups = groupsData.items || [];\n\n  // Step 4: For each group, fetch its users and update each user's group list\n  for (const group of groups) {\n    const groupId = group.uuid;\n    const groupName = group.name;\n\n    const groupUsersResponse = await fetch(\n      `https://api.dynatrace.com/iam/v1/accounts/${accountId}/groups/${groupId}/users`,\n      { method: 'GET', headers }\n    );\n\n    if (groupUsersResponse.ok) {\n      const groupUsersData = await groupUsersResponse.json();\n      const groupUserEmails = groupUsersData.items?.map((u: any) => u.email) || [];\n\n      for (const email of groupUserEmails) {\n        if (userMap[email]) {\n          userMap[email].groups.push(groupName);\n        }\n      }\n    }\n  }\n\n  // Step 5: Filter and return only selected fields\n\n  const data = await logsClient.storeLog({\n  type: \"application/json\",\n  body: Object.values(userMap),\n  });\n\nreturn data;\n\n}\n"
+      },
+      "action": "dynatrace.automations:run-javascript",
+      "position": {
+        "x": 0,
+        "y": 1
+      },
+      "description": "Run custom JavaScript code.",
+      "predecessors": []
+    }
+  },
+  "description": "",
+  "actor": "db793755-1f39-43b9-b443-4be73887345f",
+  "owner": "db793755-1f39-43b9-b443-4be73887345f",
+  "ownerType": "USER",
+  "isPrivate": false,
+  "trigger": {
+    "schedule": {
+      "isActive": true,
+      "isFaulty": false,
+      "trigger": {
+        "type": "interval",
+        "intervalMinutes": 120
+      },
+      "rule": null,
+      "filterParameters": {
+        "earliestStart": "2025-06-26",
+        "earliestStartTime": "05:16"
+      },
+      "timezone": "Asia/Calcutta",
+      "inputs": {}
+    }
+  },
+  "schemaVersion": 3,
+  "result": null,
+  "input": {},
+  "hourlyExecutionLimit": 1000,
+  "type": "STANDARD"
+}
