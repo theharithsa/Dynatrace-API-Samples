@@ -1,4 +1,4 @@
-# 📊 Alstom Audit Logs Dashboard - Implementation Guide
+# 📊 Audit Logs Dashboard - Implementation Guide
 
 This document outlines the complete setup process for creating a comprehensive audit logs dashboard in Dynatrace for monitoring user activities and security events.
 
